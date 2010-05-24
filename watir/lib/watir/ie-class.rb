@@ -351,8 +351,10 @@ module Watir
     # Navigate to the specified URL.
     #  * url - string - the URL to navigate to
     def goto(url)
+      hwnd = ie.hwnd
       @ie.navigate(url)
       wait
+      _attach_init(:hwnd, hwnd)
       return @down_load_time
     end
     
