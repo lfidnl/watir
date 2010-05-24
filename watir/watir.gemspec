@@ -30,16 +30,16 @@ spec = Gem::Specification.new do |s|
   s.author = 'Bret Pettichord'
   s.email = 'watir-general@groups.google.com'
   s.rubyforge_project = 'Watir'
-  s.homepage = 'http://www.watir.com/'
+  s.homepage = 'http://wtr.rubyforge.org/'
 
   s.platform = Gem::Platform::RUBY
   s.requirements << 'Microsoft Windows running Internet Explorer 5.5 or later.'
   s.require_path = 'lib'
 
   s.add_dependency 'win32-process', '>= 0.5.5'
-  s.add_dependency 'windows-pr', '>= 0.6.6'
-  s.add_dependency 'commonwatir', '= ' + Watir::IE::VERSION
-  s.add_dependency 'firewatir', '= ' + Watir::IE::VERSION
+  s.add_dependency 'windows-pr',    '>= 0.6.6'
+  s.add_dependency 'commonwatir',   '= 1.7.0.1'
+  s.add_dependency 'firewatir',     '= 1.7.0.1'
   s.add_dependency 'nokogiri'
 
   s.has_rdoc = true
