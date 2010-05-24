@@ -182,7 +182,7 @@ module Watir
   
   # This is like the TaggedElementLocator but
   # get all the elements by forcing @tag to be '*'
-  class ElementLocator < Locator
+  class ElementLocator < TaggedElementLocator
     def initialize(container)
       @container = container
     end
