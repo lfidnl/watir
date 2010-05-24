@@ -87,7 +87,7 @@ module Watir
     # iterates through the rows in the table. Yields a TableRow object
     def each
       assert_exists
-      1.upto(@o.getElementsByTagName("TR").length) do |i| 
+      1.upto(@o.rows.length) do |i| 
         yield TableRow.new(@container, :ole_object, _row(i))
       end
     end
@@ -156,7 +156,7 @@ module Watir
     
     # returns an ole object
     def _row(index)
-      return @o.invoke("rows")[(index - 1).to_s]
+      return @o.invoke("rows").item(index - 1)
     end
     private :_row
     
@@ -202,7 +202,7 @@ module Watir
     
     # returns an ole table body
     def ole_table_body_at_index(n)
-      return @o.tBodies[(n-1).to_s]
+      return @o.tBodies.item(n-1)
     end
     
     # iterates through each of the TableBodies in the Table. Yields a TableBody object

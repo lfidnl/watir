@@ -26,14 +26,14 @@ spec = Gem::Specification.new do |s|
     JavaScript popups (currently support will be there shortly).
   EOF
   s.author = 'Angrez Singh'
-  s.homepage = 'http://wtr.rubyforge.org'
+  s.homepage = 'http://www.watir.com'
   s.email = 'watir-general@googlegroups.com'
   s.rubyforge_project = 'Watir'
 
   s.requirements << 'Mozilla Firefox browser 1.5 or later.'
   s.require_path = 'lib'    
 
-  s.add_dependency 'commonwatir', '= 1.6.2'
+  s.add_dependency 'commonwatir', '= ' + FireWatir::Firefox::VERSION
   s.add_dependency 'activesupport'
 
   s.has_rdoc = true

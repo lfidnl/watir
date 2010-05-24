@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'rake/clean'
-require 'ftools'
 require 'fileutils'
 require 'rake/testtask'
 gem 'ci_reporter'
@@ -39,6 +38,26 @@ Rake::TestTask.new :mozilla_all_tests do |t|
   t.verbose = true
 end
 
+#
+# ------------------------------ watirspec -----------------------------------
+#
+
+if File.exist?(path = "spec/watirspec/watirspec.rake")
+  load path
+end
+
+namespace :watirspec do
+  desc 'Initialize and fetch the watirspec submodule'
+  task :init do
+    sh "git submodule init"
+    sh "git submodule update"
+  end
+end
+
+#
+# ----------------------------------------------------------------------------
+#
+
 namespace :cruise do
   def add_style_sheet_to_reports(report_dir)
     Dir[report_dir].each do |f|
@@ -54,10 +73,10 @@ namespace :cruise do
   task :move_reports do
     reports = "test/reports/*.xml"
     add_style_sheet_to_reports(reports)
-    File::copy("transform-results.xsl", "test/reports")    
+    FileUtils.cp("transform-results.xsl", "test/reports")
     if ENV['CC_BUILD_ARTIFACTS']
-      Dir[reports].each { |e| File::copy(e, ENV['CC_BUILD_ARTIFACTS']) }
-      File::copy("transform-results.xsl", ENV['CC_BUILD_ARTIFACTS'])    
+      Dir[reports].each { |e| FileUtils.cp(e, ENV['CC_BUILD_ARTIFACTS']) }
+      FileUtils.cp("transform-results.xsl", ENV['CC_BUILD_ARTIFACTS'])
     else
       puts "Build results not copied. CC_BUILD_ARTIFACTS not defined"
     end

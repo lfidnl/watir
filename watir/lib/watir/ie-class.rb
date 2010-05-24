@@ -341,7 +341,6 @@ module Watir
     
     # Return the status of the window, typically from the status bar at the bottom.
     def status
-      raise NoStatusBarException if !@ie.statusBar
       return @ie.statusText
     end
     
@@ -608,7 +607,7 @@ module Watir
         end
         s += n.innerText
         if n.getElementsByTagName("IMG").length > 0
-          s += " / " + n.getElementsByTagName("IMG")[0.to_s].src
+          s += " / " + n.getElementsByTagName("IMG").item(0).src
         end
         s += "\n"
       end
@@ -908,7 +907,7 @@ module Watir
       # strip any trailing slash from the xpath expression (as used in watir unit tests)
       xpath.chop! unless (/\/$/ =~ xpath).nil?
       
-      doc.search(xpath).each do |element|
+      doc.xpath(xpath).each do |element|
         modifiedXpath = element.path
         temp = element_by_absolute_xpath(modifiedXpath) # temp = a DOM/COM element
         selectedElements << temp if temp != nil
@@ -928,7 +927,7 @@ module Watir
       
       #puts "Hello; Given xpath is : #{xpath}"
       doc = document
-      curElem = doc.getElementsByTagName("body")["0"]
+      curElem = doc.getElementsByTagName("body").item(0)
       xpath =~ /^.*\/body\[?\d*\]?\/(.*)/
       xpath = $1
       
