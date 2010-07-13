@@ -51,13 +51,18 @@ module Watir
       command.strip!
       load_path_code = _code_that_copies_readonly_array($LOAD_PATH, '$LOAD_PATH')
       ruby_code = "require 'watir/ie'; "
-#      ruby_code = "$HIDE_IE = #{$HIDE_IE};" # This prevents attaching to a window from setting it visible. However modal dialogs cannot be attached to when not visible.
       ruby_code << "pc = #{attach_command}; " # pc = page container
-      # IDEA: consider changing this to not use instance_eval (it makes the code hard to understand)
-      ruby_code << "pc.instance_eval(#{command.inspect})"
-      exec_string = "start rubyw -e #{(load_path_code + '; ' + ruby_code).inspect}"
+      if Date::parse(RUBY_RELEASE_DATE) >=  Date::parse("2008-01-11")
+        ruby_code << "pc.instance_eval(\"#{command}\")"
+        exec_string = (load_path_code + '; ' + ruby_code)
+        exec_string = "start rubyw -e \"#{exec_string.gsub!('"','"""')}\""
+      else
+        ruby_code << "pc.instance_eval(#{command.inspect})"
+        exec_string = "start rubyw -e #{(load_path_code + '; ' + ruby_code).inspect}"
+      end
       system(exec_string)
     end
+
     
     def set_container container
       @container = container
