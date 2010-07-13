@@ -452,7 +452,7 @@ module Watir
 
       autoit = WIN32OLE.new("AutoItX3.Control")
       require 'timeout'
-      Timeout::timeout(15) do
+      Timeout::timeout(30) do
         while true
           POPUP_TITLES.each do |popup_title|
             next unless autoit.WinWait(popup_title, "", 1) == 1
