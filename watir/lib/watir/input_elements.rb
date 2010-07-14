@@ -442,31 +442,40 @@ module Watir
     INPUT_TYPES = ["file"]
     POPUP_TITLES = ['Choose file', 'Choose File to Upload']
     
-    # set the file location in the Choose file dialog in a new process
-    # will raise a Watir Exception if AutoIt is not correctly installed
+    # Opens the file dialog and sets the file location
     def set(path_to_file)
-      require 'watir/windowhelper'
-      WindowHelper.check_autoit_installed
       assert_exists
       click_no_wait
+      file_dialog_select path_to_file
+    end
 
-      autoit = WIN32OLE.new("AutoItX3.Control")
+    private
+
+    # Selects the specified path_to_file in the currently active file selector dialog.
+    # Raises an exception if AutoIt is not correctly installed
+    def file_dialog_select path_to_file
       require 'timeout'
+      require 'watir/windowhelper'
+      WindowHelper.check_autoit_installed
+      autoit = WIN32OLE.new("AutoItX3.Control")
       Timeout::timeout(30) do
         while true
           POPUP_TITLES.each do |popup_title|
-            next unless autoit.WinWait(popup_title, "", 1) == 1
-            autoit.ControlSetText(popup_title, "", "Edit1", path_to_file)
-            autoit.ControlSend(popup_title, "", "Button2", "{ENTER}")
+            next unless 1 == autoit.WinWait(popup_title, "", 1)
+            raise unless 1 == autoit.ControlSetText(popup_title, "", "Edit1", path_to_file)
+            raise unless 1 == autoit.ControlSend(popup_title, "", "Button2", "{ENTER}")
+            # Retry if that didn't work
+            if 0 == autoit.WinWaitClose(popup_title, "", 1)
+              raise unless 1 == autoit.ControlSetText(popup_title, "", "Edit1", path_to_file)
+              raise unless 1 == autoit.ControlSend(popup_title, "", "Button2", "{ENTER}")
+            end
             return
           end # each
-          sleep 0.05
         end # while
       end
-
     end
+
   end
-  
   # This class is the class for radio buttons and check boxes.
   # It contains methods common to both.
   # Normally a user would not need to create this object as it is returned by the Watir::Container#checkbox or Watir::Container#radio methods
