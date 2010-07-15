@@ -452,12 +452,9 @@ module Watir
     private
 
     # Selects the specified path_to_file in the currently active file selector dialog.
-    # Raises an exception if AutoIt is not correctly installed
     def file_dialog_select path_to_file
       require 'timeout'
-      require 'watir/windowhelper'
-      WindowHelper.check_autoit_installed
-      autoit = WIN32OLE.new("AutoItX3.Control")
+      autoit = Watir.autoit
       Timeout::timeout(30) do
         while true
           POPUP_TITLES.each do |popup_title|
