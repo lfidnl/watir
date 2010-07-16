@@ -350,13 +350,9 @@ module Watir
     # Navigate to the specified URL.
     #  * url - string - the URL to navigate to
     def goto(url)
-      hwnd = ie.hwnd
       @ie.navigate(url)
       wait
-      first_load_time = @down_load_time
-      attach_browser_window(:hwnd, hwnd)
-      wait
-      return @down_load_time + first_load_time
+      return @down_load_time
     end
     
     # Go to the previous page - the same as clicking the browsers back button
