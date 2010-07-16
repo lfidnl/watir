@@ -354,8 +354,10 @@ module Watir
       hwnd = ie.hwnd
       @ie.navigate(url)
       wait
-      _attach_init(:hwnd, hwnd)
-      return @down_load_time
+      first_load_time = @down_load_time
+      attach_browser_window(:hwnd, hwnd)
+      wait
+      return @down_load_time + first_load_time
     end
     
     # Go to the previous page - the same as clicking the browsers back button
