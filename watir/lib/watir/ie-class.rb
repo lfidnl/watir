@@ -173,7 +173,6 @@ module Watir
       @page_container = self
       @error_checkers = []
       @activeObjectHighLightColor = HIGHLIGHT_COLOR
-
       
       @logger = DefaultLogger.new
       @url_list = []
