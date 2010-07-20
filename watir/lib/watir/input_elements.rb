@@ -73,8 +73,10 @@ module Watir
             break
           else
             option.selected = true
-            @o.fireEvent("onChange")
-            @container.wait
+            if @o.onchange
+              @o.fireEvent("onChange")
+              @container.wait
+            end
             found = true
             break
           end
@@ -300,7 +302,9 @@ module Watir
       @o.value = ""
       @o.fireEvent("onKeyPress")
       @o.fireEvent("onChange")
-      @container.wait
+      if @o.onselect || @o.onkeypress || @o.onchange
+        @container.wait
+      end
       highlight(:clear)
     end
     
@@ -504,8 +508,10 @@ module Watir
     # This method is the common code for setting or clearing checkboxes and radio.
     def set_clear_item(set)
       @o.checked = set
-      @o.fireEvent("onClick")
-      @container.wait
+      if @o.onclick
+        @o.fireEvent("onClick")
+        @container.wait
+      end
     end
     private :set_clear_item
     
