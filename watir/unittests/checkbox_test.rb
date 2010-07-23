@@ -157,7 +157,7 @@ class TC_CheckBox < Test::Unit::TestCase
   end
   
   def test_checkbox_iterator
-    assert_equal(13, browser.checkboxes.length)
+    assert_equal(14, browser.checkboxes.length)
     index = 1
     browser.checkboxes.each do |c|
       # puts "#{index}: #{c.name}"
@@ -176,4 +176,11 @@ class TC_CheckBox < Test::Unit::TestCase
     browser.checkbox(:ole_object, ole).flash
   end
   
+  def test_checkbox_events
+    assert_equal( false, browser.checkbox(:name, 'box4').responds_to_event?(:onclick))
+    assert_equal( true, browser.checkbox(:name, 'box5').responds_to_event?(:onclick))
+    assert_equal( false, browser.checkbox(:name, 'box7').responds_to_event?(:onchange))
+    assert_equal( true, browser.checkbox(:name, 'box7').responds_to_event?(:onclick))
+  end
+
 end

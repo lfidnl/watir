@@ -10,6 +10,18 @@ module Watir
       @what = what
       super(nil)
     end
+
+    def responds_to_event?(event)
+      current_element = locate
+      begin
+        while current_element
+          return true if (current_element.send event)
+          current_element = current_element.parentElement
+        end
+      rescue WIN32OLERuntimeError
+      end
+      false
+    end
   end
 
   #
@@ -34,7 +46,7 @@ module Watir
           wait = true
         end
       end
-      @container.wait if wait
+      @container.wait if (wait && responds_to_event?(:onchange))
       highlight(:clear)
     end
 
@@ -73,7 +85,7 @@ module Watir
             break
           else
             option.selected = true
-            if @o.onchange
+            if responds_to_event?(:onchange)
               @o.fireEvent("onChange")
               @container.wait
             end
@@ -302,7 +314,7 @@ module Watir
       @o.value = ""
       @o.fireEvent("onKeyPress")
       @o.fireEvent("onChange")
-      if @o.onselect || @o.onkeypress || @o.onchange
+      if responds_to_event?(:onselect) || responds_to_event?(:onkeypress) ||  responds_to_event?(:onchange)
         @container.wait
       end
       highlight(:clear)
@@ -508,7 +520,7 @@ module Watir
     # This method is the common code for setting or clearing checkboxes and radio.
     def set_clear_item(set)
       @o.checked = set
-      if @o.onclick
+      if responds_to_event?(:onclick)
         @o.fireEvent("onClick")
         @container.wait
       end
