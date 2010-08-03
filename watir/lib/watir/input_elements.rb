@@ -22,6 +22,10 @@ module Watir
       end
       false
     end
+
+    def wait_after_js_event(event_list)
+      @container.wait
+    end
   end
 
   #
@@ -46,7 +50,7 @@ module Watir
           wait = true
         end
       end
-      @container.wait if (wait && responds_to_event?(:onchange))
+      wait_after_js_event :onchange if wait
       highlight(:clear)
     end
 
@@ -85,10 +89,8 @@ module Watir
             break
           else
             option.selected = true
-            if responds_to_event?(:onchange)
-              @o.fireEvent("onChange")
-              @container.wait
-            end
+            @o.fireEvent("onChange")
+            wait_after_js_event :onchange
             found = true
             break
           end
@@ -314,9 +316,7 @@ module Watir
       @o.value = ""
       @o.fireEvent("onKeyPress")
       @o.fireEvent("onChange")
-      if responds_to_event?(:onselect) || responds_to_event?(:onkeypress) ||  responds_to_event?(:onchange)
-        @container.wait
-      end
+      wait_after_js_event :onselect, :onkeypress, :onchange
       highlight(:clear)
     end
     
@@ -520,10 +520,8 @@ module Watir
     # This method is the common code for setting or clearing checkboxes and radio.
     def set_clear_item(set)
       @o.checked = set
-      if responds_to_event?(:onclick)
-        @o.fireEvent("onClick")
-        @container.wait
-      end
+      @o.fireEvent("onClick")
+      wait_after_js_event :onclick
     end
     private :set_clear_item
     
