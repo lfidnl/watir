@@ -23,7 +23,7 @@ module Watir
       false
     end
 
-    def wait_after_js_event(event_list)
+    def wait_after_js_event(*args)
       @container.wait
     end
   end
